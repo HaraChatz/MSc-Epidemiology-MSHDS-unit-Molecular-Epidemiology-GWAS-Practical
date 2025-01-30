@@ -1,19 +1,57 @@
-- Charikleia Chatzigeorgiou
+- Written by Raquel Granell; adapted by Charikleia Chatzigeorgiou (fb23004@bristol.ac.uk)
 # Practical : Genome-wide association study of BMI 
 
 ## Objectives
-1. Introduction to Plink
-2. Clean a dataset
+1. Get familiar working with Plink
+2. Clean a genetic dataset
 3. Conduct a GWAS analysis
 4. Produce Manhattan, QQ and LocusZoom plots
 5. Interpret GWAS results
 
 In this practical you will run a GWAS for BMI on some simulated data with the use of Plink.
 
+###Introduction to PLINK
+PLINK 1.9 is a widely used open-source software tool for whole-genome association studies (GWAS) and other genetic analyses. The software is primarily used for managing, analysing, and manipulating genotype and phenotype data, as well as performing various statistical analyses in genetics. 
+
+`https://www.cog-genomics.org/plink/`
+
+
+
+### Log In
+Log into bluecrystal using PuTTY.
+
+Run the following command to access a compute node:
+
+`srun --account=SSCM034564  --partition=teach_cpu  --time=3:00:00  --pty bash -i`
+
+### Data
+You should already have most of the files for this practical cloned from GitHub to your **home scratch** directory. 
+Type the following to move into the right directory:
+
+`cd ~/scratch/genetic-epidemiology-practicals/GWAS`
+
+Set up an alias to the complete data directory:
+
+`datadir="/mnt/storage/private/mrcieu/training/genetic_epidemiology/GWAS/data"`
+
+You should save your output to `/GWAS/output/`, make this (local) directory, using the `mkdir output`.
+It might be easier to also set up an alias to your local outcome directory (modify path accordingly, $HOME will point to your home directory)
+
+`outdir="$HOME/scratch/genetic-epidemiology-practicals/GWAS/output"`
+
+Scripts (files containing commands) should be saved in `/GWAS/scripts/`.
+
+If you get really stuck, example scripts and ready-made output are available in `/GWAS/results/` (no peaking unless you have to!).
+
+### Loading Plink
+We will load Plink using the following code (already included in the script provided):  
+
+`module add apps/plink1.9`
+
 ### PLINK data format
 
 Conceptually, genetic data is stored in matrix form – e.g. rows for individuals, columns for SNPs.
-In practice, this can take many different shapes, styles and conventions. We will use PLINK
+In practice, this can take many different shapes, styles and conventions. We will use PLINK version 1.9
 format (and mostly binary plink format). You can find information about it here:
 
 `https://www.cog-genomics.org/plink/1.9/formats#bed`
@@ -43,38 +81,6 @@ contains:
 
 How many individuals and SNPs are in the dataset?
 
-
-
-### Log In
-Log into bluecrystal using PuTTY.
-
-Run the following command to access a compute node:
-
-`srun --nodes=1 --ntasks-per-node=1 --time=01:00:00 --reservation=SSCM026902 --account=SSCM026902 --pty bash -i`
-
-### Data
-You should already have most of the files for this practical cloned from GitHub to your **home scratch** directory. 
-Type the following to move into the right directory:
-
-`cd ~/scratch/genetic-epidemiology-practicals/GWAS`
-
-Set up an alias to the complete data directory:
-
-`datadir="/mnt/storage/private/mrcieu/training/genetic_epidemiology/GWAS/data"`
-
-You should save your output to `/GWAS/output/`, make this (local) directory, using the `mkdir output`.
-It might be easier to also set up an alias to your local outcome directory (modify path accordingly, $HOME will point to your home directory)
-
-`outdir="$HOME/scratch/genetic-epidemiology-practicals/GWAS/output"`
-
-Scripts (files containing commands) should be saved in `/GWAS/scripts/`.
-
-If you get really stuck, example scripts and ready-made output are available in `/GWAS/results/` (no peaking unless you have to!).
-
-### Loading Plink
-We will load Plink using the following code (already included in the script provided):  
-
-`module add apps/plink/2.00`
 
 ### Exercise 2 - GWAS
 First, we will run a GWAS of BMI dataset.
