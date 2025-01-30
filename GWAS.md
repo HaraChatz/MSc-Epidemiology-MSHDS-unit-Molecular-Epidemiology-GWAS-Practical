@@ -10,12 +10,23 @@
 
 In this practical you will run a GWAS for BMI on some simulated data with the use of Plink.
 
-###Introduction to PLINK
+## Introduction to PLINK
 PLINK 1.9 is a widely used open-source software tool for whole-genome association studies (GWAS) and other genetic analyses. The software is primarily used for managing, analysing, and manipulating genotype and phenotype data, as well as performing various statistical analyses in genetics. 
 
 `https://www.cog-genomics.org/plink/`
 
+### PLINK data format
 
+Conceptually, genetic data is stored in matrix form – e.g. rows for individuals, columns for SNPs.
+In practice, this can take many different shapes, styles and conventions. We will use PLINK version 1.9
+format (and mostly binary plink format). You can find information about it here:
+
+`https://www.cog-genomics.org/plink/2.0/formats#bed`
+
+1. The .fam file - this has information about the individuals
+2. The .bim file - this has information about the SNPs
+3. The .bed file - this is the matrix of genotypes for all SNPs and individuals. Note that this
+is not human readable.
 
 ### Log In
 Log into bluecrystal using PuTTY.
@@ -30,11 +41,16 @@ Type the following to move into the right directory:
 
 `cd ~/scratch/genetic-epidemiology-practicals/GWAS`
 
-Set up an alias to the complete data directory:
+### Navigate to data folder
+`cd /mnt/storage/private/mrcieu/training/genetic_epidemiology/GWAS`
+
+Set up an alias to the complete data and scripts directories:
 
 `datadir="/mnt/storage/private/mrcieu/training/genetic_epidemiology/GWAS/data"`
+`scriptsdir="/mnt/storage/private/mrcieu/training/genetic_epidemiology/GWAS/scripts"`
 
 You should save your output to `/GWAS/output/`, make this (local) directory, using the `mkdir output`.
+
 It might be easier to also set up an alias to your local outcome directory (modify path accordingly, $HOME will point to your home directory)
 
 `outdir="$HOME/scratch/genetic-epidemiology-practicals/GWAS/output"`
@@ -46,90 +62,153 @@ If you get really stuck, example scripts and ready-made output are available in 
 ### Loading Plink
 We will load Plink using the following code (already included in the script provided):  
 
-`module add apps/plink1.9`
+`module add apps/plink2`
 
-### PLINK data format
+### Navigate to data folder
 
-Conceptually, genetic data is stored in matrix form – e.g. rows for individuals, columns for SNPs.
-In practice, this can take many different shapes, styles and conventions. We will use PLINK version 1.9
-format (and mostly binary plink format). You can find information about it here:
+`cd ${datadir}`
 
-`https://www.cog-genomics.org/plink/1.9/formats#bed`
-
-1. The .fam file - this has information about the individuals
-2. The .bim file - this has information about the SNPs
-3. The .bed file - this is the matrix of genotypes for all SNPs and individuals. Note that this
-is not human readable.
 
 ### Exercise 1a
 
 Open a linux command line, navigate to the data directory and use appropriate linux
 commands to look at the files:
 
-Look at the size and structure of the geno_raw.fam file
+Look at the structure and size of the geno_raw.fam file
 
-`head geno_raw.fam`
-`wc -l geno_raw.fam`
+
+`head geno_unclean.fam`
+
+You should see that the .fam contains 6 columns:
+
+1. Family ID
+2. Individual ID
+3. Father ID
+4. Mother ID
+5. Sex (1=male, 2=female, 0=unknown)
+6. Phenotype (-9=missing)
+
+`wc -l geno_unclean.fam`
+
+You should see that the .fam file contains 8237 lines that correspond to 8237 individuals
 
 ### Exercise 1b
-
-Look at the size and structure of the geno_raw.bim file and see what each column
+Look at the structure and the size of the geno_raw.bim file and see what each column
 contains:
 
-`wc -l geno_raw.bim`
-`head geno_raw.bim`
+`head geno_unclean.bim`
 
-How many individuals and SNPs are in the dataset?
+The .bim file also contains 6 columns:
+
+1. Chromosome
+2. SNP ID
+3. Genetic position
+4. Physical position
+5. Allele 1 (normally the minor allele)
+6. Allele 2
+
+`wc -l geno_unclean.bim`
+
+You should see that the .bim file contains 463,080 lines that correspond to 463,080 SNPs
 
 
 ### Exercise 2 - GWAS
-First, we will run a GWAS of BMI dataset.
+We will run a GWAS of BMI dataset.
 
 Using the Linux commands from above section:
 
-Take a look at the genetic data `${datadir}/geno_clean.bim` & `.fam` using the "less" and "head" commands.
+Take a look at the phenotype data `${datadir}/phen.txt`:
 
-Similarly, take a look at the phenotype data `${datadir}/phen.txt`.
+`head ${datadir}/phen.txt`
 
-**_Questions:_**
-> (1) How many individuals are there?
+The phen.txt file contains 7 columns:
 
-> (2) How many SNPs are there?
+1. Family ID
+2. Individual ID
+3. BMI - Body Mass Index
+4. DBP - Diastolic Blood Pressure
+5. SBP - Systolic Blood Pressure
+6. CRP - C-reactive protein
+7. HT - Hypertension 
+
+phen.txt contains phenotypic information for 5 outcomes 
+
 
 
 ### Exercise 3 - Cleaning the GWAS data
 There are many steps to a good QC procedure (see Weale 2010. Quality control for genome-wide association studies. Methods in Molecular Biology 628:341-372). Here, we assume that related individuals and non-white Europeans have already been removed to proceed with the final steps of the QC.
 
+We want to filter the data to the following parameters:
+1. SNPs with more than 5% missing values removed
+2. Individuals with more than 5% missing values removed
+3. SNPs with allele frequency < 0.01 removed
+4. SNPs with Hardy Weinberg disequilibrium p value < 1e-6 removed
+
+
+Navigate to the `scripts` directory. Now look at the `qc.sh` script to see the suggested exclusions for this dataset. 
+
+`cd ${scriptsdir}`
+
+
+**Run the `qc.sh` script to generate new ‘cleaned’ data files `geno_qc.bed` `.bim` `.fam`**
+Navigate to the `data` directory in order to run the plink command and filter your data
+
+`cd ${datadir}`
+
+```bash
+
+plink \
+        --bfile ${datadir}/data/geno_unclean \
+        --maf 0.01 \
+        --hwe 1e-6 \
+        --geno 0.05 \
+        --mind 0.05 \
+        --make-bed \
+        --out ${outdir}/geno_qc
+```
+
 **_Question:_**
-> (4) For each of the parameters below, which SNPs or individuals do you think should be removed?
+> (4) For each of the parameters below, What numbers have been removed from the data?? All the details for every analysis that is conducted with the use of Plink can be found at the corresponding .log file
 
 >     Minor allele frequency?
 >     Hardy Weinberg p-value?
 >     SNP missingness?
 >     Individual missingness?
 
-Navigate to the `scripts` directory. Now look at the `qc.sh` script to see the suggested exclusions for this dataset. 
+All the details for every analysis that is conducted with the use of Plink can be found at the corresponding `.log` file
 
-**Run the `qc.sh` script to generate new ‘cleaned’ data files `geno_qc.bed` `.bim` `.fam` (again, you may need to run the `chmod +x qc.sh` script to make sure the script is executable).**
-
-
-### Exercise 4 - Running the GWAS
-
-We will now run a ‘clean’ GWAS for BMI. This requires you to edit some scripts in order to apply Qc filters.
-
-To do this, copy the `unclean_gwas.sh` to a new script using `cp unclean_gwas.sh {newfilename}`.
-
-Edit the file (using nano) to use the new ‘clean’ GWAS data (you will need to be careful here, as the clean GWAS data should be in your local data directory not the ${datadir} we set up). Then, modify the covar-name option so it includes all principle component covariates in the model (as well as age and sex) and output to a new file named `clean`.
+### Exercise 5 - Running the GWAS
 
 **Now you are ready to run the clean GWAS `./clean_gwas.sh`**
 
-Ypu can also make new QQ and Manhattan plots.
+```bash
 
-Go back to `./scripts`
+plink \
+        --bfile ${datadir}/geno_qc \
+        --linear \
+        --pheno ${datadir}/phen.txt \
+        --pheno-name BMI \
+        --covar ${datadir}/covs.txt \
+        --covar-name age sex \
+        --out ${outdir}/bmi       
 
-Copy the `unclean_gwas_graphs.sh` file to a new file named `clean_gwas_graphs.sh`.
+```
 
-Edit (using nano) to use the new clean results and output to new files. Run this new script with the `./clean_gwas_graphs.sh` script.
+### Exercise 6 -Make QQ and Manhattan plots.
+
+Navigate to the `scripts` directory.
+
+`cd ${scriptsdir}`
+
+
+```bash
+export R_LIBS="~/R_libs"
+mkdir ~/R_libs
+module load languages/R-3.2.2-ATLAS
+
+Rscript gwas_graphs.R ${outdir}/bmi.assoc.linear.add ${outdir}/bmi_clean
+```
+
 
 Open WINSCP (in windows) and open the graphs you’ve just created.
 
