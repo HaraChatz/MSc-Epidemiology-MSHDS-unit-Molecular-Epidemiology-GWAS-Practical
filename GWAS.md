@@ -39,7 +39,9 @@ Run the following command to access a compute node:
 ### Set up an alias to the complete data and scripts directories:
 
 `datadir="/mnt/storage/private/mrcieu/training/genetic_epidemiology/GWAS/data"`
+
 `scriptsdir="$HOME/GWAS/scripts"`
+
 `outdir="$HOME/GWAS/output"`
 
 
@@ -212,9 +214,9 @@ For this part of the practical we will use the results from analysis that we did
 
 In order to generate those plots we will use "QCGWAS" packe in R.
 
-Navigate to the `scripts` directory.
+Navigate to the `outputs` directory.
 
-`cd ${scriptsdir}`
+`cd ${outdir}`
 
 
 ```bash
@@ -224,7 +226,7 @@ mkdir ~/R_libs
 
 module add languages/R/4.1.2
 
-Rscript gwas_graphs.R ${outdir}/bmi.assoc.linear.add ${outdir}/bmi_clean
+Rscript ../scripts/gwas_graphs.R /mnt/storage/private/mrcieu/training/genetic_epidemiology/GWAS/output/bmi.assoc.linear.add bmi_clean
 ```
 
 ### Tranfering data from bluecrystal to your local disk in order to view plots 
