@@ -273,6 +273,8 @@ Upload the regional association results already prepared for you, `clean16.BMI.g
 
 Select `Plink data` format and specify the `rs8050136` SNP.
 
+Specify the "Marker Column Name" as `ID`
+
 Check the genome build - is the default correct for your data?
 
 Now, create your plot!
