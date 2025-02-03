@@ -19,24 +19,20 @@ Run the following command to access a compute node:
 
 `srun --account=SSCM034564  --partition=teach_cpu  --time=3:00:00  --pty bash -i`
 
-### Data
-### Generate GWAS directory in your home space on bluecrystal
 
-`mkdir GWAS`
+### Directory set-up
+Copy the GWAS directory to your home space on bluecrystal
 
-### Navigate to your GWAS folder and create an "output" folder in which you will store the results from all the analysis that will take place in this practical
-`cd GWAS`
+ `cp -R /mnt/storage/private/mrcieu/training/mol_epi/gwas ~`
 
-`mkdir output`
+Check this has worked: 
 
-### Navigate to the training materials folder on bluecrystal
+`tree gwas`
 
-`cd /mnt/storage/private/mrcieu/training/mol_epi/gwas`
 
-### Copy scripts from the training materials to your own space
- `cp -R scripts $HOME/GWAS/`
+### Set up an alias for the data and scripts directories:
 
-### Set up an alias to the complete data and scripts directories:
+To avoid us having to keep typing full paths, we will set up shorter alias names for the key directories.
 
 `datadir="/mnt/storage/private/mrcieu/training/genetic_epidemiology/GWAS/data"`
 
@@ -44,8 +40,6 @@ Run the following command to access a compute node:
 
 `outdir="$HOME/GWAS/output"`
 
-
-If you get really stuck, example scripts and ready-made output are available in `/mnt/storage/private/mrcieu/training/mol_epi/gwas/results/` (no peaking unless you have to!).
 
 
 ## Introduction to PLINK
