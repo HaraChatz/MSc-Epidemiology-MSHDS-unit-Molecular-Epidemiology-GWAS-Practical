@@ -301,6 +301,14 @@ grep -v NA bmi_clean16.BMI.glm.linear.add | sort -g -k 12 | head
 
 > Go to OpenTargets website `https://genetics.opentargets.org/`, enter this SNP name and see what you can find out about this variant
 
+## End of practical
+
+Please exit the compute node using the following command
+```bash
+exit
+```
+
+You should see you are now back on the login node and you can close your terminal/putty window to end the session.
 
 
 ## Exercise 6 -Optional - Generating a LocusZoom Plot
