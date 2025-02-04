@@ -253,7 +253,7 @@ cd ${outdir}
 export R_LIBS="~/R_libs"
 mkdir ~/R_libs
 module add languages/R/4.1.2
-Rscript ${scriptsdir}/gwas_graphs.R ${outdir}/GWAS.BMI.glm.linear ${outdir}/bmi_clean
+Rscript ${scriptsdir}/gwas_graphs.R ${outdir}/GWAS.BMI.glm.linear ${outdir}
 ```
 
 ## Tranfering data from bluecrystal to your local disk in order to view plots 
