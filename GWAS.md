@@ -125,7 +125,7 @@ wc -l ${datadir}/geno_unclean.bim
 You should see that the .bim file contains 463,080 lines that correspond to 463,080 SNPs
 
 
-## Exercise 2 - Phenotypic information of the particupants
+## Exercise 2 - Phenotypic information of the participants
 
 Using the Linux commands from above section:
 
