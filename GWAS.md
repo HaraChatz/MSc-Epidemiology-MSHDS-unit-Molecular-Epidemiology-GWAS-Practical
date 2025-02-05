@@ -275,7 +275,7 @@ Go to Applications and open Filezilla. Connect to bluecrystal using the same cre
 For the rest of the questions, go to the `results/` directory where you can see the pre-made results file `bmi_clean16.BMI.glm.linear.add`, this contains the clean gwas results for chromosome 16 only.
 
 ```bash
-cd /mnt/storage/private/mrcieu/training/mol_epi/gwas/results
+cd ~/gwas/results
 ```
 
 **_Questions (use clean **gwas results for chromosome 16 only provided in the results folder**) :_**
