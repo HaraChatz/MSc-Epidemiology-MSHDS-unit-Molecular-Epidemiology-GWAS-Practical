@@ -242,10 +242,17 @@ For this part of the practical we will use the results from analysis that we did
 
 In order to generate those plots we will use "QCGWAS" package in R.
 
-Navigate to the `outputs` directory.
+Navigate to the `outputs` directory and have a look at what files have been generated
 
 ```bash
 cd ${outdir}
+ls
+```
+
+We need to edit the GWAS output to get it ready for use in R, using this command (which removes the rows referring to covariates, so we only have rows for the SNP association statistics).
+
+```bash
+awk 'NR==1 || /ADD/' ${outdir}/GWAS.BMI.glm.linear > ${outdir}/GWAS.BMI.glm.linear.add
 ```
 
 
@@ -253,7 +260,7 @@ cd ${outdir}
 export R_LIBS="~/R_libs"
 mkdir ~/R_libs
 module add languages/R/4.1.2
-Rscript ${scriptsdir}/gwas_graphs.R ${outdir}/GWAS.BMI.glm.linear ${outdir}
+Rscript ${scriptsdir}/gwas_graphs.R ${outdir}/GWAS.BMI.glm.linear.add ${outdir}
 ```
 
 ## Tranfering data from bluecrystal to your local disk in order to view plots 
