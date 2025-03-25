@@ -1,4 +1,4 @@
-- Written by Lavinia Paternoster; adapted by Charikleia Chatzigeorgiou (fb23004@bristol.ac.uk)
+- Written by Lavinia Paternoster and Charikleia Chatzigeorgiou (fb23004@bristol.ac.uk)
 # Practical : Genome-wide association study of BMI 
 
 ## Objectives
